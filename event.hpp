@@ -6,11 +6,11 @@
 class event_c {
 public:
     // Construct sets time of event_c.
-    event_c(float time): time(time) {}
+    event_c(double time): time(time) {}
 
     // Execute event_c by invoking this method.
     virtual void process_event() = 0;
-    const float time;
+    const double time;
     virtual ~event_c() = default;
 };
 
@@ -22,7 +22,7 @@ struct eventComparator {
 
 class arrival_event_c : public event_c {
 public:
-    arrival_event_c(float time, unsigned int entry_port): event_c(time), entry_port(entry_port) {}
+    arrival_event_c(double time, unsigned int entry_port): event_c(time), entry_port(entry_port) {}
     virtual void process_event();
 private:
     unsigned int entry_port;
@@ -30,10 +30,10 @@ private:
 
 class leave_event_c : public event_c {
 public:
-    leave_event_c(float time, unsigned int exit_port): event_c(time), exit_port(exit_port) {}
+    leave_event_c(double time, unsigned int exit_port): event_c(time), exit_port(exit_port) {}
     virtual void process_event();
-private:
     unsigned int exit_port;
+private:
 };
 
 

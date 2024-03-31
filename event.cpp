@@ -9,7 +9,7 @@ void arrival_event_c::process_event()
 {
     simulation_c& sim = simulation_c::get_instance();
     unsigned int exit_port = sim.choose_queue(entry_port);
-    sim.schedule_event(exit_port, this->time);
+    sim.schedule_event(exit_port);
 
 #if !defined(NDEBUG)
     std::cout << "arrival_event_c is processed: " << time << '\n';

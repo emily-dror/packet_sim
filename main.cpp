@@ -1,22 +1,21 @@
 #include "sim.hpp"
 
 #include <iostream>
-#include <ctime>
 #include <deque>
 
-void parse_cmd_line(char* argv[], float &time_limit, unsigned int &entry_ports_count,
-                                unsigned int &exit_ports_count, float** &probability,
-                                float* &arrival_rates, unsigned int* &queues_capacities,
-                                float* &service_rates)
+void parse_cmd_line(char* argv[], double &time_limit, unsigned int &entry_ports_count,
+                                unsigned int &exit_ports_count, double** &probability,
+                                double* &arrival_rates, unsigned int* &queues_capacities,
+                                double* &service_rates)
 {
     unsigned int base   = 0;
     time_limit          = std::stof(argv[++base]);
     entry_ports_count   = std::atoi(argv[++base]);
     exit_ports_count    = std::atoi(argv[++base]);
 
-    probability         = new float*[entry_ports_count];
+    probability         = new double*[entry_ports_count];
     for (int i = 0; i < entry_ports_count; ++i) {
-        probability[i] = new float[exit_ports_count];
+        probability[i] = new double[exit_ports_count];
 
         probability[i][0] = 100 * std::stof(argv[++base]);
         for (int j = 1; j < exit_ports_count; ++j) {
@@ -24,7 +23,7 @@ void parse_cmd_line(char* argv[], float &time_limit, unsigned int &entry_ports_c
         }
     }
 
-    arrival_rates = new float[entry_ports_count];
+    arrival_rates = new double[entry_ports_count];
     for (int i = 0; i < entry_ports_count; ++i) {
         arrival_rates[i] = std::stof(argv[++base]);
     }
@@ -34,7 +33,7 @@ void parse_cmd_line(char* argv[], float &time_limit, unsigned int &entry_ports_c
         queues_capacities[i] = std::atoi(argv[++base]);
     }
 
-    service_rates = new float[exit_ports_count];
+    service_rates = new double[exit_ports_count];
     for (int i = 0; i < exit_ports_count; ++i) {
         service_rates[i] = std::stof(argv[++base]);
     }
@@ -42,12 +41,8 @@ void parse_cmd_line(char* argv[], float &time_limit, unsigned int &entry_ports_c
 
 int main(int argc, char* argv[]) {
 
-    // Get starting timepoint
-    time_t start, finish;
-    time(&start);
-
     // time limit until no packets arrive (T)
-    float time_limit;
+    double time_limit;
 
     // number of entry ports (N)
     unsigned int entry_ports_count;
@@ -56,16 +51,16 @@ int main(int argc, char* argv[]) {
     unsigned int exit_ports_count;
 
     // probability matrix (𝑃0,0 𝑃0,1 … 𝑃0,𝑀−1  𝑃1,0 𝑃1,1 … 𝑃1,𝑀−1  …  𝑃𝑁−1,0 𝑃𝑁−1,1 … 𝑃𝑁−1,𝑀−1)
-    float** probability;
+    double** probability;
 
      // arrival rates of packets (𝜆0 𝜆1 … 𝜆𝑁−1)
-    float *arrival_rates;
+    double *arrival_rates;
 
     // exit ports' queues' sizes (𝑄0 𝑄1 … 𝑄𝑀−1)
     unsigned int *queues_capacities;
 
     // service rates of packets (𝜆0 𝜆1 … 𝜆𝑁−1)
-    float *service_rates;
+    double *service_rates;
 
     parse_cmd_line(argv, time_limit, entry_ports_count, exit_ports_count, probability,
                                             arrival_rates, queues_capacities, service_rates);
@@ -126,11 +121,8 @@ int main(int argc, char* argv[]) {
     // Run the simulation.
     sim.run();
 
-    // Get ending timepoint
-    time(&finish);
-
     // Print simulation statistics.
-    sim.print_statistics(difftime(finish, start));
+    sim.print_statistics();
 
 #if !defined(NDEBUG)
     std::cout << "Simulation ended.\n";
