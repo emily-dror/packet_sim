@@ -24,27 +24,27 @@ void simulation_c::parse_command_line(int argc, char* argv[])
     __exit_ports_count    = std::atoi(argv[++base]);
 
     __probability         = new double*[__entry_ports_count];
-    for (int i = 0; i < __entry_ports_count; ++i) {
+    for (unsigned int i = 0; i < __entry_ports_count; ++i) {
         __probability[i] = new double[__exit_ports_count];
 
         __probability[i][0] = 100 * std::stof(argv[++base]);
-        for (int j = 1; j < __exit_ports_count; ++j) {
+        for (unsigned int j = 1; j < __exit_ports_count; ++j) {
             __probability[i][j] = 100 * std::stof(argv[++base]) + __probability[i][j - 1];
         }
     }
 
     __arrival_rates = new double[__entry_ports_count];
-    for (int i = 0; i < __entry_ports_count; ++i) {
+    for (unsigned int i = 0; i < __entry_ports_count; ++i) {
         __arrival_rates[i] = std::stof(argv[++base]);
     }
 
     __queues_capacities = new unsigned int[__exit_ports_count];
-    for (int i = 0; i < __exit_ports_count; ++i) {
+    for (unsigned int i = 0; i < __exit_ports_count; ++i) {
         __queues_capacities[i] = std::atoi(argv[++base]);
     }
 
     __service_rates = new double[__exit_ports_count];
-    for (int i = 0; i < __exit_ports_count; ++i) {
+    for (unsigned int i = 0; i < __exit_ports_count; ++i) {
         __service_rates[i] = std::stof(argv[++base]);
     }
 }
@@ -52,7 +52,7 @@ void simulation_c::parse_command_line(int argc, char* argv[])
 simulation_c::~simulation_c()
 {
     // Simulation ended. release used resources.
-    for (int i = 0; i < __entry_ports_count; ++i) {
+    for (unsigned int i = 0; i < __entry_ports_count; ++i) {
         delete[] __probability[i];
     }
     delete[] __probability;
@@ -111,7 +111,7 @@ int simulation_c::choose_queue(int entry_port)
     std::uniform_int_distribution<int>  distribution(1, 100);
 
     int value = distribution(rng);
-    for (int i = 0; i < __exit_ports_count; ++i) {
+    for (unsigned int i = 0; i < __exit_ports_count; ++i) {
         if (value <= __probability[entry_port][i]) {
             return i;
         }

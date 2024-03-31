@@ -1,5 +1,5 @@
 COMPILER := g++
-COMPILER_FLAGS := --std=c++17 -DNDEBUG -Wall
+COMPILER_FLAGS := --std=c++17 -DNDEBUG
 SIM_BIN := simulator
 HDRS := event.hpp sim.hpp
 SRCS := main.cpp sim.cpp event.cpp
